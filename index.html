@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Assistant</title>
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tabler Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    
+    <!-- Load React and Babel Standalone -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        :root {
+            --color-background-primary: #12131a;
+            --color-background-secondary: #1c1d26;
+            --color-background-info: rgba(99, 102, 241, 0.15);
+            --color-background-success: rgba(16, 185, 129, 0.15);
+            --color-background-warning: rgba(245, 158, 11, 0.15);
+            --color-background-danger: rgba(239, 68, 68, 0.15);
+            
+            --color-text-primary: #f3f4f6;
+            --color-text-secondary: #9ca3af;
+            --color-text-info: #818cf8;
+            --color-text-success: #34d399;
+            --color-text-warning: #fbbf24;
+            --color-text-danger: #f87171;
+            
+            --color-border-primary: #2d2f3d;
+            --color-border-secondary: #242634;
+            --color-border-tertiary: #1f212d;
+            --color-border-info: #6366f1;
+            --color-border-success: #10b981;
+            --color-border-danger: #ef4444;
+            
+            --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --border-radius-md: 10px;
+            --border-radius-lg: 20px;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0b0c10;
+            margin: 0;
+            padding: 3rem 1.5rem;
+            font-family: var(--font-sans);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        #root {
+            width: 100%;
+            max-width: 820px;
+            background: linear-gradient(145deg, #161722, #0f1016);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Premium custom inputs */
+        input, select, textarea {
+            padding: 12px 16px;
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--border-radius-md);
+            background: #181922;
+            color: var(--color-text-primary);
+            outline: none;
+            font-family: var(--font-sans);
+            transition: all 0.25s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--color-text-info);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25), inset 0 2px 4px rgba(0,0,0,0.2);
+            background: #1c1d28;
+        }
+        
+        /* Styled Buttons */
+        button {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+            opacity: 0.95;
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #12131a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a2c3a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f4258;
+        }
+        
+        /* Range input premium style */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: #202230;
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+            padding: 0;
+            box-shadow: none;
+            border: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #818cf8;
+            cursor: pointer;
+            transition: transform 0.1s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Custom manual script loader and compiler -->
+    <script>
+        // Catch any global errors in the browser
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error("GLOBAL BROWSER ERROR:", message, "at", source, "line", lineno, "col", colno, error);
+            showError("Global Browser Error: " + message + " (line " + lineno + ", col " + colno + ")");
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log("Manual loader: Starting...");
+            
+            // Check if React, ReactDOM and Babel are loaded
+            if (typeof React === 'undefined' || typeof ReactDOM === 'undefined' || typeof Babel === 'undefined') {
+                console.error("Error: React, ReactDOM, or Babel is not defined!");
+                showError("React, ReactDOM, or Babel library failed to load from CDN.");
+                return;
+            }
+            
+            fetch('app.jsx?t=' + Date.now())
+                .then(res => {
+                    console.log("Manual loader: fetch status =", res.status);
+                    if (!res.ok) throw new Error("Fetch failed with status: " + res.status);
+                    return res.text();
+                })
+                .then(code => {
+                    console.log("Manual loader: app.jsx fetched, length =", code.length, ". Compiling...");
+                    try {
+                        const compiled = Babel.transform(code, {
+                            presets: [
+                                ['react', { runtime: 'classic' }]
+                            ]
+                        }).code;
+                        console.log("Manual loader: app.jsx compiled successfully. Length =", compiled.length);
+                        console.log("Manual loader: compiled code start:", compiled.substring(0, 300));
+                        console.log("Manual loader: compiled code end:", compiled.substring(compiled.length - 300));
+                        
+                        console.log("Manual loader: app.jsx executing...");
+                        const script = document.createElement('script');
+                        script.text = compiled;
+                        document.body.appendChild(script);
+                        console.log("Manual loader: app.jsx executed. Rendering App...");
+                        
+                        // Now render the app
+                        renderApp();
+                    } catch (err) {
+                        console.error("Manual loader: Babel compilation failed:", err);
+                        showError("Babel compilation error: " + err.message);
+                    }
+                })
+                .catch(err => {
+                    console.error("Manual loader: Fetch failed:", err);
+                    showError("Fetch error: " + err.message);
+                });
+        });
+
+        function showError(msg) {
+            const container = document.getElementById('root');
+            if (container) {
+                container.innerHTML = `
+                    <div style="padding: 24px; color: #f87171; background: #1c1d26; border-radius: 12px; margin: 20px; font-family: monospace; border: 1px solid rgba(239, 68, 68, 0.2); box-shadow: 0 4px 12px rgba(0,0,0,0.3)">
+                        <h2 style="margin: 0 0 12px; color: #f87171; font-size: 18px">Loader Error:</h2>
+                        <pre style="white-space: pre-wrap; color: #f87171; margin: 0; font-size: 13px">${msg}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        function renderApp() {
+            class ErrorBoundary extends React.Component {
+                constructor(props) {
+                    super(props);
+                    this.state = { hasError: false, error: null, info: null };
+                }
+                componentDidCatch(error, info) {
+                    console.error("ErrorBoundary caught error:", error, info);
+                    this.setState({ hasError: true, error: error, info: info });
+                }
+                render() {
+                    if (this.state.hasError) {
+                        return React.createElement(
+                            'div',
+                            { style: { padding: '24px', color: '#f87171', background: '#1c1d26', borderRadius: '12px', margin: '20px', fontFamily: 'monospace', border: '1px solid rgba(239, 68, 68, 0.2)' } },
+                            React.createElement('h2', { style: { margin: '0 0 12px' } }, 'Something went wrong during render:'),
+                            React.createElement('pre', { style: { whiteSpace: 'pre-wrap', color: '#f87171', fontSize: '13px' } }, this.state.error && this.state.error.toString()),
+                            React.createElement('pre', { style: { whiteSpace: 'pre-wrap', color: '#9ca3af', fontSize: '12px', marginTop: '10px' } }, this.state.error && this.state.error.stack),
+                            React.createElement('pre', { style: { whiteSpace: 'pre-wrap', color: '#6366f1', fontSize: '12px', marginTop: '10px' } }, this.state.info && this.state.info.componentStack)
+                        );
+                    }
+                    return this.props.children;
+                }
+            }
+
+            console.log("renderApp: App component type =", typeof App);
+            if (typeof App === 'undefined') {
+                showError("App component is not defined! Make sure it is declared globally in app.jsx.");
+                return;
+            }
+
+            const container = document.getElementById('root');
+            const root = ReactDOM.createRoot(container);
+            root.render(React.createElement(ErrorBoundary, null, React.createElement(App)));
+            console.log("renderApp: root.render called");
+        }
+    </script>
+</body>
+</html>

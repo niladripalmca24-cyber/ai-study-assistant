@@ -1,0 +1,28 @@
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# Caches and runtime
+__pycache__/
+*.pyc
+.pytest_cache/
+.eslintcache
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Archive files
+*.zip
+*.tar.gz
+
+# Dependency directories (if any node modules are installed later)
+node_modules/
+dist/
+build/
