@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      # You can override the API key here or let the container read the local .env file
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      # Mount the current directory for live updates during local development (optional)
+      - .:/app
+      # Exclude node_modules or caches if they exist
+      - /app/__pycache__
+    restart: unless-stopped

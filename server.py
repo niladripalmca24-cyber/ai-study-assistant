@@ -9,7 +9,8 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 mimetypes.add_type("application/javascript", ".jsx")
 mimetypes.add_type("text/javascript", ".jsx")
 
-PORT = 8000
+PORT = int(os.environ.get("PORT", 8000))
+HOST = os.environ.get("HOST", "0.0.0.0")
 
 class ProxyHandler(SimpleHTTPRequestHandler):
     def do_POST(self):
@@ -127,8 +128,8 @@ class ProxyHandler(SimpleHTTPRequestHandler):
 def run():
     # Make sure we serve files from the directory of server.py
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    print(f"Starting server on http://127.0.0.1:{PORT} ...")
-    server = ThreadingHTTPServer(("127.0.0.1", PORT), ProxyHandler)
+    print(f"Starting server on http://{HOST}:{PORT} ...")
+    server = ThreadingHTTPServer((HOST, PORT), ProxyHandler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
