@@ -1,5 +1,7 @@
 # AI Study Assistant (React)
 
+live demo-https://ai-study-assistant-1-lwsb.onrender.com/
+
 A premium client-side React application built with UMD libraries and Babel Standalone.
 
 ## Prerequisites
